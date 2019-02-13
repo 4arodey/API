@@ -13,8 +13,6 @@ const routeBuilder = require('./routes/index.routes');
 
 routeBuilder(app, router);
 
-app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
 
 responseHandler.handleError(app);
