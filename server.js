@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const responseHandler = require('./responseHandler');
 const config = require('./config');
@@ -11,6 +12,10 @@ const logger = require('./src/logger');
 const routeBuilder = require('./routes/index.routes');
 
 routeBuilder(app, router);
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(bodyParser.json());
 
 responseHandler.handleError(app);
 
