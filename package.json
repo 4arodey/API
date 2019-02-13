@@ -1,0 +1,38 @@
+{
+  "name": "oleg-arr",
+  "version": "0.1.0",
+  "description": "this is my first api serivice",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "lint": "eslint ./",
+    "test": "NODE_ENV=npm  mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "4arodey"
+  },
+  "keywords": [
+    "api",
+    "array",
+    "data"
+  ],
+  "author": "Oleg Karpach",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^5.12.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-react": "^7.12.4",
+    "swagger-express-middleware": "^2.0.1",
+    "tslint": "^5.12.1",
+    "winston": "^3.2.1"
+  },
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "nodemon": "^1.18.10",
+    "swagger-express-validator": "^0.1.1",
+    "typescript": "^3.3.1"
+  }
+}
