@@ -1,5 +1,6 @@
 const HTTP_CODES = require('./httpCodes');
 const logger = require('./src/logger');
+require('dotenv/config');
 
 function handleSuccess(actionFn) {
   return (req, res, next) => {
@@ -21,7 +22,7 @@ function handleError(app) {
       next();
     }
 
-    logger.error(err);
+      (process.env.NODE_ENV === 'developer') ? logger.error(err) : logger.error('Internal server error');
 
     res.status(HTTP_CODES.SERVER_ERROR);
     res.send({
