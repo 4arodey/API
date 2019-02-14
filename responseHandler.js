@@ -2,14 +2,15 @@ const HTTP_CODES = require('./httpCodes');
 const logger = require('./src/logger');
 
 function handleSuccess(actionFn) {
-  return (req, res) => {
+  return (req, res, next) => {
     Promise
       .resolve(actionFn(req, res))
       .then((actionResult) => {
         res.send({
-          data: actionResult,
-        });
-      });
+            data: actionResult,
+          });
+        })
+       .catch(next);
   };
 }
 
