@@ -8,10 +8,10 @@ function handleSuccess(actionFn) {
       .resolve(actionFn(req, res))
       .then((actionResult) => {
         res.send({
-            data: actionResult,
-          });
-        })
-       .catch(next);
+          data: actionResult,
+        });
+      })
+      .catch(next);
   };
 }
 
@@ -22,12 +22,26 @@ function handleError(app) {
       next();
     }
 
-      (process.env.NODE_ENV === 'developer') ? logger.error(err) : logger.error('Internal server error');
+    const errObj = {
+      messsage: '',
+      stackTrase: '',
+      type: 'Validation Error',
+    };
 
+    if (process.env.NODE_ENV === 'developer') {
+      errObj.messsage = err.message;
+      errObj.stackTrase = err.stack;
+
+      if (err.status === 500) {
+        errObj.messsage = 'Internal server error';
+      }
+    }
+
+    if (err.status === 500) {
+      logger.error(err);
+    }
     res.status(HTTP_CODES.SERVER_ERROR);
-    res.send({
-      error: err,
-    });
+    res.send(errObj);
   });
 }
 
