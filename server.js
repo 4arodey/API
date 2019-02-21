@@ -1,8 +1,12 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const createMiddleware = require('swagger-express-middleware');
+const swaggerUi = require('swagger-ui-express');
+const yaml = require('yamljs');
+
+const swaggerDocument = yaml.load('swaggerValidator.yaml');
 
 const responseHandler = require('./responseHandler');
-const config = require('./config');
+const appConfig = require('./app.config');
 
 const app = express();
 const router = express.Router();
@@ -11,12 +15,19 @@ const logger = require('./src/logger');
 
 const routeBuilder = require('./routes/index.routes');
 
-routeBuilder(app, router);
+createMiddleware(swaggerDocument, app, (err, middleware) => {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use(middleware.metadata());
+  app.use(middleware.CORS());
+  app.use(middleware.files());
+  app.use(middleware.parseRequest());
+  app.use(middleware.validateRequest());
 
-app.use(bodyParser.json());
+  routeBuilder(app, router);
 
-responseHandler.handleError(app);
+  responseHandler.handleError(app);
+});
 
-app.listen(config.PORT, () => {
-  logger.info(`API is started. The port is ${config.PORT}.`);
+app.listen(appConfig.PORT, () => {
+  logger.info(`API is started. The port is ${appConfig.PORT}.`);
 });
