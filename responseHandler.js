@@ -1,5 +1,8 @@
 const HTTP_CODES = require('./httpCodes');
 const logger = require('./src/logger');
+
+const appConfig = require('./app.config');
+
 require('dotenv/config');
 
 function handleSuccess(actionFn) {
@@ -24,23 +27,34 @@ function handleError(app) {
 
     const errObj = {
       messsage: '',
-      stackTrase: '',
-      type: 'Validation Error',
+      stackTrace: '',
+      type: '',
     };
 
-    if (process.env.NODE_ENV === 'developer') {
-      errObj.messsage = err.message;
-      errObj.stackTrase = err.stack;
 
-      if (err.status === 500) {
-        errObj.messsage = 'Internal server error';
-      }
-    }
+    errObj.messsage = appConfig.NODE_ENV === 'developer'
+      ? err.message
+      : 'Internal server error';
 
-    if (err.status === 500) {
+    errObj.stackTrace = appConfig.NODE_ENV === 'developer'
+      ? err.stack
+      : '';
+
+    errObj.type = err.status === HTTP_CODES.CLIENT_ERROR
+      ? 'Validation Error'
+      : 'Internal Server Error';
+
+
+    if (err.status === HTTP_CODES.SERVER_ERROR) {
       logger.error(err);
     }
-    res.status(HTTP_CODES.SERVER_ERROR);
+
+    const httpErrorCode = err.status === HTTP_CODES.CLIENT_ERROR
+      ? HTTP_CODES.CLIENT_ERROR
+      : HTTP_CODES.SERVER_ERROR;
+
+    res.status(httpErrorCode);
+
     res.send(errObj);
   });
 }

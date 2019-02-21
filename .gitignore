@@ -3,6 +3,6 @@ logs/
 #node.js modules
 node_modules/
 #server configuration
-config.js
+app.config.js
 #file with .extension
 .*
