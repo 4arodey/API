@@ -6,7 +6,11 @@
   "scripts": {
     "start": "nodemon server.js",
     "lint": "eslint ./",
-    "test": "NODE_ENV=npm  mocha --reporter spec"
+    "test": "NODE_ENV=npm  mocha --reporter spec",
+    "knex:make": "knex migrate:make --knexfile knexfile.js",
+    "knex:migrate": "knex migrate:latest --knexfile knexfile.js",
+    "knex:rollback": "knex migrate:rollback --knexfile knexfile.js",
+    "knex:seed": "knex knex:run --knexfile knexfile.js"
   },
   "repository": {
     "type": "git",
@@ -33,7 +37,11 @@
   "dependencies": {
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "knex": "^0.16.3",
+    "lodash": "^4.17.11",
     "nodemon": "^1.18.10",
+    "npm": "^6.8.0",
+    "objection": "^1.6.3",
     "swagger-express-middleware": "^2.0.1",
     "swagger-express-mw": "^0.1.0",
     "swagger-express-validator": "^0.1.1",

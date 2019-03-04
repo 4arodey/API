@@ -1,8 +1,7 @@
 swagger: "2.0"
 info:
-  description: API description in Markdown.
+  description: RESTful API
   version: 1.0.0
-host: localhost:8000
 basePath: /api/v1
 schemes:
   - https
@@ -24,7 +23,7 @@ paths:
           required: true
           type: integer
           minimum: 1
-          description: Parameter description in Markdown.
+          description: UserID.
       responses:
         200:
           description: OK

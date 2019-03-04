@@ -1,9 +1,8 @@
 const HTTP_CODES = require('./httpCodes');
 const logger = require('./src/logger');
+import { filter } from 'lodash';
 
 const appConfig = require('./app.config');
-
-require('dotenv/config');
 
 function handleSuccess(actionFn) {
   return (req, res, next) => {
@@ -28,10 +27,8 @@ function handleError(app) {
     const errObj = {
       messsage: '',
       stackTrace: '',
-      type: '',
+      code,
     };
-
-
     errObj.messsage = appConfig.NODE_ENV === 'developer'
       ? err.message
       : 'Internal server error';
@@ -40,23 +37,39 @@ function handleError(app) {
       ? err.stack
       : '';
 
-    errObj.type = err.status === HTTP_CODES.CLIENT_ERROR
-      ? 'Validation Error'
-      : 'Internal Server Error';
+    errObj.code = err.status;
 
 
-    if (err.status === HTTP_CODES.SERVER_ERROR) {
+    if (err.status === HTTP_CODES.SERVER_ERROR || err.status === HTTP_CODES.NOT_FOUND_ERR) {
       logger.error(err);
     }
 
-    const httpErrorCode = err.status === HTTP_CODES.CLIENT_ERROR
-      ? HTTP_CODES.CLIENT_ERROR
-      : HTTP_CODES.SERVER_ERROR;
+    const httpErrorCode = getErrorCode(err.status);
 
     res.status(httpErrorCode);
 
-    res.send(errObj);
+    res.send(filter(errObj));
   });
+}
+
+function getErrorCode(errorStatus) {
+  let result;
+
+  switch (errorStatus) {
+    case HTTP_CODES.CLIENT_ERROR:
+      result = HTTP_CODES.CLIENT_ERROR;
+      break;
+
+    case HTTP_CODES.NOT_FOUND_ERR:
+      result = HTTP_CODES.NOT_FOUND_ERR;
+      break;
+
+    default:
+      result = HTTP_CODES.SERVER_ERROR;
+
+  }
+
+  return result;
 }
 
 

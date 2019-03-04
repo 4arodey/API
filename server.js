@@ -15,11 +15,10 @@ const logger = require('./src/logger');
 
 const routeBuilder = require('./routes/index.routes');
 
+
 createMiddleware(swaggerDocument, app, (err, middleware) => {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-  app.use(middleware.metadata());
-  app.use(middleware.CORS());
-  app.use(middleware.files());
+
   app.use(middleware.parseRequest());
   app.use(middleware.validateRequest());
 
@@ -27,6 +26,7 @@ createMiddleware(swaggerDocument, app, (err, middleware) => {
 
   responseHandler.handleError(app);
 });
+
 
 app.listen(appConfig.PORT, () => {
   logger.info(`API is started. The port is ${appConfig.PORT}.`);
