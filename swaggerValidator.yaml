@@ -23,7 +23,7 @@ paths:
           required: true
           type: integer
           minimum: 1
-          description: Parameter description in Markdown.
+          description: UserID.
       responses:
         200:
           description: OK
