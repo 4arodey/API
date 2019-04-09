@@ -1,0 +1,8 @@
+# folder logs
+logs/
+#node.js modules
+node_modules/
+#server configuration
+app.config.js
+#file with .extension
+.*
